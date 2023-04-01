@@ -1,15 +1,24 @@
 package com.example.weathermvvm.presentation.adapters
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.weathermvvm.presentation.ARG_OBJECT
+import com.example.weathermvvm.presentation.MainFragment
 
-class VpAdapter(fa: FragmentActivity): FragmentStateAdapter(fa) {
+class VpAdapter(fa: FragmentActivity,  private val list: List<String>): FragmentStateAdapter(fa) {
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return list.size
     }
 
     override fun createFragment(position: Int): Fragment {
-        TODO("Not yet implemented")
+        val fragment = MainFragment()
+        fragment.arguments = Bundle().apply {
+            putString(ARG_OBJECT, list[position])
+        }
+        return fragment
     }
+
+
 }

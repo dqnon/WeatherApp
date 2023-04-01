@@ -9,7 +9,7 @@ import com.example.weathermvvm.data.WeatherRepositoryImpl
 import com.example.weathermvvm.data.repository.GeoPositionRepositoryImpl
 import com.example.weathermvvm.domain.UseCase.*
 
-class MainViewModelFactory(context: Context, activityResultRegistry: ActivityResultRegistry): ViewModelProvider.Factory {
+class MainViewModelFactory(context: Context): ViewModelProvider.Factory {
 
     private val weatherRepository = WeatherRepositoryImpl()
 
@@ -18,7 +18,7 @@ class MainViewModelFactory(context: Context, activityResultRegistry: ActivityRes
 
     private val changeBackgroundUseCase = ChangeBackgroundUseCase()
 
-    private val permission = Permission(context, activityResultRegistry)
+    //private val permission = Permission(context, activityResultRegistry)
 
     private val getForecastUseCase = GetForecastUseCase(weatherRepository)
 
@@ -27,7 +27,7 @@ class MainViewModelFactory(context: Context, activityResultRegistry: ActivityRes
         return MainViewModel(
             getLocationUseCase = getLocationUseCase,
             changeBackgroundUseCase = changeBackgroundUseCase,
-            permission = permission,
+            //permission = permission,
             getForecastUseCase = getForecastUseCase,
         ) as T
     }

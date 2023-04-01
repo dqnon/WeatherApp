@@ -15,12 +15,13 @@ import kotlinx.coroutines.launch
 class MainViewModel(
     private val getLocationUseCase: GetLocationUseCase,
     private val changeBackgroundUseCase: ChangeBackgroundUseCase,
-    private val permission: Permission,
+    //private val permission: Permission,
     private val getForecastUseCase: GetForecastUseCase,
 ): ViewModel() {
 
     var resultForecast = MutableLiveData<Forecast>()
     var conditionBackGround = MutableLiveData<Int>()
+    val resultCoord = MutableLiveData<String>()
 
     val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
         CoroutineScope(Dispatchers.IO).launch {
@@ -29,11 +30,11 @@ class MainViewModel(
     }
 
     init {
-        permission.registerPermissionListener()
-        permission.checkLocationPermission()
-        CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
-            getLocationData()
-        }
+//        permission.registerPermissionListener()
+//        permission.checkLocationPermission()
+//        CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
+//            getLocationData()
+//        }
     }
 
     suspend fun getForecastData(city: String) {
@@ -41,17 +42,23 @@ class MainViewModel(
         resultForecast.postValue(forecastWeather)
     }
 
+    fun getLatLon(coord: String){
+        resultCoord.postValue(coord)
+    }
+
+
     fun getLocationData() {
         var location = getLocationUseCase.getActualLocation()
         location.addOnCompleteListener {
-                CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
-                    if (permission.checkLocationPermission()) {
-                        getForecastData("${it.result.latitude}, ${it.result.longitude}")
-                    }
-                    else{
-                        // если запрещен доступ к gps
-                        permission.registerPermissionListener()
-                    }
+                CoroutineScope(Dispatchers.IO).launch {
+//                    if (permission.checkLocationPermission()) {
+                        //getForecastData("${it.result.latitude}, ${it.result.longitude}")
+                        getLatLon("${it.result.latitude}, ${it.result.longitude}")
+//                    }
+//                    else{
+//                        // если запрещен доступ к gps
+//                        permission.registerPermissionListener()
+//                    }
                 }
         }
     }
