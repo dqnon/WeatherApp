@@ -35,6 +35,7 @@ class MainViewModel(
 //        CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
 //            getLocationData()
 //        }
+        getLocationData()
     }
 
     suspend fun getForecastData(city: String) {
@@ -50,7 +51,7 @@ class MainViewModel(
     fun getLocationData() {
         var location = getLocationUseCase.getActualLocation()
         location.addOnCompleteListener {
-                CoroutineScope(Dispatchers.IO).launch {
+//                CoroutineScope(Dispatchers.IO).launch {
 //                    if (permission.checkLocationPermission()) {
                         //getForecastData("${it.result.latitude}, ${it.result.longitude}")
                         getLatLon("${it.result.latitude}, ${it.result.longitude}")
@@ -59,7 +60,7 @@ class MainViewModel(
 //                        // если запрещен доступ к gps
 //                        permission.registerPermissionListener()
 //                    }
-                }
+//                }
         }
     }
 

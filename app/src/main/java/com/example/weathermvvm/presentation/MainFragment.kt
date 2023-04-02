@@ -2,6 +2,7 @@ package com.example.weathermvvm.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,8 +29,6 @@ class MainFragment : Fragment() {
     lateinit var adapterHour: HourAdapter
     lateinit var adapterDays: DaysAdapter
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,7 +40,6 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         mainViewModel = ViewModelProvider(this, MainViewModelFactory(requireContext()))
             .get(MainViewModel::class.java)
@@ -57,6 +55,7 @@ class MainFragment : Fragment() {
             binding.tvLocation.text = it.location.name
             binding.tvCondition.text = it.current.condition.text
             binding.tvLastUpdated.text = it.current.last_updated
+
             mainViewModel.changeBackground(it.current.condition.text)
 
             //прогноз по часам
@@ -79,27 +78,21 @@ class MainFragment : Fragment() {
 
         })
 
-        binding.getWeather.setOnClickListener {
-            CoroutineScope(Dispatchers.IO + mainViewModel.coroutineExceptionHandler).launch {
-                mainViewModel.getLocationData()
-
-            }
-        }
-
+        //получение названия города для создания новых фрагментов
         arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
             var tempVar = getString(ARG_OBJECT).toString()
             CoroutineScope(Dispatchers.IO + mainViewModel.coroutineExceptionHandler).launch {
                 mainViewModel.getForecastData(tempVar)
             }
+
+            //обновление данных
+            binding.getWeather.setOnClickListener {
+                CoroutineScope(Dispatchers.IO + mainViewModel.coroutineExceptionHandler).launch {
+                    mainViewModel.getForecastData(tempVar)
+                    Log.d("CityLog", "$tempVar")
+                }
+            }
         }
-
     }
 
-    companion object {
-
-        @JvmStatic
-        fun newInstance() = MainFragment()
-
-
-    }
 }

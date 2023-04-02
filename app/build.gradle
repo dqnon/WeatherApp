@@ -64,6 +64,9 @@ dependencies {
     //picasso
     implementation 'com.squareup.picasso:picasso:2.71828'
 
+    //circle indicator for viewpager
+    implementation 'me.relex:circleindicator:2.1.6'
+
     //room
 //    implementation 'androidx.room:room-ktx:2.5.1'
 //    kapt 'androidx.room:room-compiler:2.5.1'

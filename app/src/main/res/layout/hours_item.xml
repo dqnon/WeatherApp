@@ -22,8 +22,8 @@
 
         <ImageView
             android:id="@+id/imIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             app:srcCompat="@android:drawable/sym_def_app_icon" />
 
         <TextView

@@ -14,8 +14,10 @@ class GetLocationUseCase(private val geoPositionRepository: GeoPositionRepositor
     @SuppressLint("SuspiciousIndentation")
     fun getActualLocation(): Task<Location> {
         var locationItem = geoPositionRepository.getLocation(context)
-            return locationItem
+        return locationItem
     }
+
+
 }
 
 

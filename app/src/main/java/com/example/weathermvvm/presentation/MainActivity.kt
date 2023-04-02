@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var mainViewModel: MainViewModel
-    val cityList = mutableListOf<String>("", "Moscow", "Samara", "Bryansk", "Novosibirsk")
+    val cityList = mutableListOf("", "Moscow", "Rostov-na-Donu","Samara", "Bryansk", "Novosibirsk")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,16 +32,13 @@ class MainActivity : AppCompatActivity() {
         mainViewModel = ViewModelProvider(this, MainViewModelFactory(applicationContext))
             .get(MainViewModel::class.java)
 
-
-        mainViewModel.getLocationData()
-
         mainViewModel.resultCoord.observe(this, Observer {
             cityList[0] = it
-
             binding.viewPager.adapter = VpAdapter(this, cityList)
             Log.d("CoordLog", "${cityList}")
-        })
 
+            binding.indicator.setViewPager(binding.viewPager)
+        })
 
         binding.btSearchActivity.setOnClickListener {
             val intent = Intent(this@MainActivity, SearchActivity::class.java)

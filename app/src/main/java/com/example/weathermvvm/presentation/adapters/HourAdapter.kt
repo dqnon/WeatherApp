@@ -22,7 +22,6 @@ class HourAdapter: ListAdapter<Hour, HourAdapter.HourItemViewHolder>(Comparator(
             tvTime.text = forecast.time.substring(11)
             Picasso.get().load("https:" + forecast.condition.icon).into(imIcon)
             Log.d("MyLog", "АДАПТЕР ПРОГНОЗ ПО ЧАСАМ ${forecast.condition.icon}")
-            forecast.time_epoch
 
         }
     }

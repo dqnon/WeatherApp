@@ -45,6 +45,7 @@ class SearchActivity : AppCompatActivity() {
             adapterSearch.submitList(it)
 
 
+
         })
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
