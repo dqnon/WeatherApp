@@ -11,15 +11,18 @@ import com.example.weathermvvm.R
 import com.example.weathermvvm.databinding.SearchItemBinding
 import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
 
-class SearchAdapter: ListAdapter<SearchCityItem, SearchAdapter.SearchItemViewHolder>(Comparator()) {
+class SearchAdapter(val listener: Listener): ListAdapter<SearchCityItem, SearchAdapter.SearchItemViewHolder>(Comparator()) {
 
     class SearchItemViewHolder(view: View): RecyclerView.ViewHolder(view) {
         private val binding = SearchItemBinding.bind(view)
 
-        fun bind(searchItem: SearchCityItem) = with(binding){
+        fun bind(searchItem: SearchCityItem, listener: Listener) = with(binding){
             tvCity.text = searchItem.name
             tvCountry.text = searchItem.country
             Log.d("SearchLog", "АДАПТЕР ПРОГНОЗ ПО ПОИСКУ ${searchItem.name}")
+            imAddCity.setOnClickListener {
+                listener.onClick(searchItem)
+            }
         }
     }
 
@@ -40,9 +43,11 @@ class SearchAdapter: ListAdapter<SearchCityItem, SearchAdapter.SearchItemViewHol
     }
 
     override fun onBindViewHolder(holder: SearchItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
-
+        holder.bind(getItem(position), listener)
     }
 
+    interface Listener{
+        fun onClick(city: SearchCityItem)
+    }
 
 }

@@ -1,5 +1,7 @@
 package com.example.weathermvvm.domain.model.searchCity
 
+import java.io.Serializable
+
 data class SearchCityItem(
     val country: String,
     val id: Int,

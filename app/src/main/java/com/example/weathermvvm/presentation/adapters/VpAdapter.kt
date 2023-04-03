@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
 import com.example.weathermvvm.presentation.ARG_OBJECT
 import com.example.weathermvvm.presentation.MainFragment
 
-class VpAdapter(fa: FragmentActivity,  private val list: List<String>): FragmentStateAdapter(fa) {
+class VpAdapter(fa: FragmentActivity,  private val list: MutableList<String>): FragmentStateAdapter(fa) {
+
     override fun getItemCount(): Int {
         return list.size
     }
@@ -20,5 +22,9 @@ class VpAdapter(fa: FragmentActivity,  private val list: List<String>): Fragment
         return fragment
     }
 
+    fun addNotes(cityItem: SearchCityItem) {
+        list.add(cityItem.name)
+        notifyDataSetChanged()
+    }
 
 }

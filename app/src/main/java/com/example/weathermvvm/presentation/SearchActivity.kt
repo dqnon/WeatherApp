@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
@@ -17,6 +18,7 @@ import com.example.weathermvvm.databinding.ActivityMainBinding
 import com.example.weathermvvm.databinding.ActivitySearchBinding
 import com.example.weathermvvm.databinding.SearchItemBinding
 import com.example.weathermvvm.domain.UseCase.GetSearchListUseCase
+import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
 import com.example.weathermvvm.presentation.adapters.SearchAdapter
 import com.example.weathermvvm.presentation.viewmodel.SearchViewModel
 import com.example.weathermvvm.presentation.viewmodel.SearchViewModelFactory
@@ -24,7 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
 
     lateinit var binding: ActivitySearchBinding
     lateinit var searchViewModel: SearchViewModel
@@ -35,18 +37,22 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+
+
         searchViewModel = ViewModelProvider(this, SearchViewModelFactory()).get(SearchViewModel::class.java)
 
         searchViewModel.resultSearch.observe(this, Observer {
-            adapterSearch = SearchAdapter()
+            adapterSearch = SearchAdapter(this)
             binding.rcViewSearch.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             binding.rcViewSearch.adapter = adapterSearch
 
             adapterSearch.submitList(it)
-
-
-
         })
+
+
+
+
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -63,5 +69,13 @@ class SearchActivity : AppCompatActivity() {
         })
 
 
+    }
+
+    override fun onClick(city: SearchCityItem) {
+
+        val i = Intent(this, MainActivity::class.java)
+        i.putExtra("city", city.name)
+        Log.d("IntentLog", "searchActivity: {city.name}")
+        startActivity(i)
     }
 }
