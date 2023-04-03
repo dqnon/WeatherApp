@@ -10,18 +10,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weathermvvm.databinding.ActivityMainBinding
-import com.example.weathermvvm.domain.model.forecast.Forecastday
-import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
-import com.example.weathermvvm.presentation.adapters.DaysAdapter
-import com.example.weathermvvm.presentation.adapters.HourAdapter
 import com.example.weathermvvm.presentation.adapters.VpAdapter
 import com.example.weathermvvm.presentation.viewmodel.MainViewModel
 import com.example.weathermvvm.presentation.viewmodel.MainViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -34,18 +26,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        searchLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-//                result: ActivityResult ->
-//            if (result.resultCode == RESULT_OK){
-//                Log.d("IntentLog", "Main Activity ${result.data?.getStringExtra("city")}----------")
-//            }
-//        }
-
-        val extras = intent.extras
-        if (extras != null) {
-            val value = extras.getString("city")
-            Log.d("IntentLog", "Mainactivity $value")
-            //The key argument here must match that used in the other activity
+        //возможно перенести в отдельный класс
+        searchLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+                result: ActivityResult ->
+            if(result.resultCode == RESULT_OK){
+                val text = result.data?.getStringExtra("city")
+                Toast.makeText(this, "$text", Toast.LENGTH_SHORT).show()
+            }
         }
 
         mainViewModel = ViewModelProvider(this, MainViewModelFactory(applicationContext))
@@ -63,8 +50,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.btSearchActivity.setOnClickListener {
-            val intent = Intent(this@MainActivity, SearchActivity::class.java)
-            startActivity(intent)
+            searchLauncher?.launch(Intent(this, SearchActivity::class.java))
         }
 
 

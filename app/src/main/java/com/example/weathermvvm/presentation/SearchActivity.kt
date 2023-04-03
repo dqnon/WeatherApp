@@ -37,9 +37,6 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
-
         searchViewModel = ViewModelProvider(this, SearchViewModelFactory()).get(SearchViewModel::class.java)
 
         searchViewModel.resultSearch.observe(this, Observer {
@@ -49,10 +46,6 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
 
             adapterSearch.submitList(it)
         })
-
-
-
-
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -68,14 +61,13 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
 
         })
 
-
     }
 
     override fun onClick(city: SearchCityItem) {
 
-        val i = Intent(this, MainActivity::class.java)
+        val i = Intent()
         i.putExtra("city", city.name)
-        Log.d("IntentLog", "searchActivity: {city.name}")
-        startActivity(i)
+        setResult(RESULT_OK, i)
+        finish()
     }
 }
