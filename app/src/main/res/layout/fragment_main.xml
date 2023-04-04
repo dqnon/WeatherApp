@@ -7,10 +7,11 @@
     android:layout_height="match_parent"
     >
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    <com.example.weathermvvm.Utils.MySwipeToRefresh
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <!-- TODO: Update blank fragment layout -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -63,7 +64,7 @@
                 android:id="@+id/tvCondition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="20dp"
                 android:text="Light Rain--"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
@@ -108,9 +109,11 @@
                 android:textColor="#9AF4EDED"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.95"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </com.example.weathermvvm.Utils.MySwipeToRefresh>
 </FrameLayout>
