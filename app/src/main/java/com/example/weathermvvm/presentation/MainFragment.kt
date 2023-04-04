@@ -1,17 +1,17 @@
 package com.example.weathermvvm.presentation
 
-import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultRegistry
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weathermvvm.R
 import com.example.weathermvvm.databinding.FragmentMainBinding
 import com.example.weathermvvm.presentation.adapters.DaysAdapter
 import com.example.weathermvvm.presentation.adapters.HourAdapter
@@ -21,14 +21,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-const val ARG_OBJECT = "object"
+const val ARG_CITY = "city"
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
     lateinit var mainViewModel: MainViewModel
     lateinit var adapterHour: HourAdapter
     lateinit var adapterDays: DaysAdapter
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,20 +78,20 @@ class MainFragment : Fragment() {
         })
 
         //получение названия города для создания новых фрагментов
-        arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-            var tempVar = getString(ARG_OBJECT).toString()
+        arguments?.takeIf { it.containsKey(ARG_CITY) }?.apply {
+            var tempVar = getString(ARG_CITY).toString()
             CoroutineScope(Dispatchers.IO + mainViewModel.coroutineExceptionHandler).launch {
                 mainViewModel.getForecastData(tempVar)
             }
 
             //обновление данных
-            binding.getWeather.setOnClickListener {
+            binding.swipeRefresh.setOnRefreshListener {
                 CoroutineScope(Dispatchers.IO + mainViewModel.coroutineExceptionHandler).launch {
                     mainViewModel.getForecastData(tempVar)
-                    Log.d("CityLog", "$tempVar")
                 }
+                binding.swipeRefresh.isRefreshing = false
+
             }
         }
     }
-
 }

@@ -1,10 +1,8 @@
 package com.example.weathermvvm.presentation
 
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -21,27 +19,14 @@ import com.example.weathermvvm.presentation.viewmodel.MainViewModelFactory
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var mainViewModel: MainViewModel
-
-    //убрать
     val cityList: MutableList<String> = ArrayList()
     private val adapter = VpAdapter(this, cityList)
     private var searchLauncher: ActivityResultLauncher<Intent>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        //возможно перенести в отдельный класс
-        searchLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                result: ActivityResult ->
-            if(result.resultCode == RESULT_OK){
-                val text = result.data?.getSerializableExtra("city") as SearchCityItem
-                Toast.makeText(this, "${text.name}", Toast.LENGTH_SHORT).show()
-                adapter.addCity(text)
-                //обновление индикатора
-                binding.indicator.setViewPager(binding.viewPager)
-            }
-        }
 
         mainViewModel = ViewModelProvider(this, MainViewModelFactory(applicationContext))
             .get(MainViewModel::class.java)
@@ -49,12 +34,27 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.resultCoord.observe(this, Observer {
             cityList.add(it)
             binding.viewPager.adapter = adapter
-            Log.d("CoordLog", "${cityList}")
-
             binding.indicator.setViewPager(binding.viewPager)
-
-
         })
+
+        fun addCity(city: SearchCityItem){
+            adapter.addCity(city)
+            //обновление индикатора
+            binding.indicator.setViewPager(binding.viewPager)
+            //открытие страницы с выбранным городом
+            binding.viewPager.currentItem = cityList.size
+        }
+
+        //возможно перенести в отдельный класс
+        searchLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+                result: ActivityResult ->
+            if(result.resultCode == RESULT_OK){
+                val city = result.data?.getSerializableExtra("city") as SearchCityItem
+                addCity(city)
+            }
+        }
+
+
 
         binding.btDelete.setOnClickListener {
             val position = binding.viewPager.currentItem

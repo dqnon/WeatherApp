@@ -67,6 +67,9 @@ dependencies {
     //circle indicator for viewpager
     implementation 'me.relex:circleindicator:2.1.6'
 
+    //swiperefreshlayout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
     //room
 //    implementation 'androidx.room:room-ktx:2.5.1'
 //    kapt 'androidx.room:room-compiler:2.5.1'

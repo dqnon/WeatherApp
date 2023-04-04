@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
-import com.example.weathermvvm.presentation.ARG_OBJECT
+import com.example.weathermvvm.presentation.ARG_CITY
 import com.example.weathermvvm.presentation.MainFragment
 
 class VpAdapter(fa: FragmentActivity,  private val list: MutableList<String>): FragmentStateAdapter(fa) {
@@ -17,7 +17,7 @@ class VpAdapter(fa: FragmentActivity,  private val list: MutableList<String>): F
     override fun createFragment(position: Int): Fragment {
         val fragment = MainFragment()
         fragment.arguments = Bundle().apply {
-            putString(ARG_OBJECT, list[position])
+            putString(ARG_CITY, list[position])
         }
         return fragment
     }
