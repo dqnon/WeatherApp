@@ -10,4 +10,4 @@ data class SearchCityItem(
     val name: String,
     val region: String,
     val url: String
-)
+): Serializable

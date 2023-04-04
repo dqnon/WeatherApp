@@ -22,9 +22,16 @@ class VpAdapter(fa: FragmentActivity,  private val list: MutableList<String>): F
         return fragment
     }
 
-    fun addNotes(cityItem: SearchCityItem) {
+    fun addCity(cityItem: SearchCityItem) {
         list.add(cityItem.name)
         notifyDataSetChanged()
     }
+
+    fun deleteCity(position: Int){
+        list.removeAt(position)
+        notifyDataSetChanged()
+    }
+
+
 
 }

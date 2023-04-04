@@ -66,7 +66,7 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
     override fun onClick(city: SearchCityItem) {
 
         val i = Intent()
-        i.putExtra("city", city.name)
+        i.putExtra("city", city)
         setResult(RESULT_OK, i)
         finish()
     }
