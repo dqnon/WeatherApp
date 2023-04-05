@@ -1,10 +1,6 @@
 package com.example.weathermvvm.presentation
 
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,17 +11,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weathermvvm.databinding.FragmentMainBinding
 import com.example.weathermvvm.presentation.adapters.DaysAdapter
 import com.example.weathermvvm.presentation.adapters.HourAdapter
-import com.example.weathermvvm.presentation.viewmodel.MainViewModel
-import com.example.weathermvvm.presentation.viewmodel.MainViewModelFactory
+import com.example.weathermvvm.presentation.viewmodel.WeatherViewModel
+import com.example.weathermvvm.presentation.viewmodel.WeatherViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 const val ARG_CITY = "city"
 class MainFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
-    lateinit var mainViewModel: MainViewModel
+    lateinit var weatherViewModel: WeatherViewModel
     lateinit var adapterHour: HourAdapter
     lateinit var adapterDays: DaysAdapter
     override fun onCreateView(
@@ -40,22 +37,22 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        mainViewModel = ViewModelProvider(this, MainViewModelFactory(requireContext()))
-            .get(MainViewModel::class.java)
+        weatherViewModel = ViewModelProvider(this, WeatherViewModelFactory(requireContext()))
+            .get(WeatherViewModel::class.java)
 
-        mainViewModel.conditionBackGround.observe(requireActivity(), Observer { imageId ->
+        weatherViewModel.conditionBackGround.observe(viewLifecycleOwner, Observer { imageId ->
             binding.backImage.setImageResource(imageId)
         })
 
         //forecast
-        mainViewModel.resultForecast.observe(requireActivity(), Observer { it ->
+        weatherViewModel.resultForecast.observe(viewLifecycleOwner, Observer { it ->
 
             binding.tvTemperatura.text = "${it.current.temp_c}°C"
             binding.tvLocation.text = it.location.name
             binding.tvCondition.text = it.current.condition.text
             binding.tvLastUpdated.text = it.current.last_updated
 
-            mainViewModel.changeBackground(it.current.condition.text)
+            weatherViewModel.changeBackground(it.current.condition.text)
 
             //прогноз по часам
             adapterHour = HourAdapter()
@@ -80,14 +77,14 @@ class MainFragment : Fragment() {
         //получение названия города для создания новых фрагментов
         arguments?.takeIf { it.containsKey(ARG_CITY) }?.apply {
             var tempVar = getString(ARG_CITY).toString()
-            CoroutineScope(Dispatchers.IO + mainViewModel.coroutineExceptionHandler).launch {
-                mainViewModel.getForecastData(tempVar)
+            CoroutineScope(Dispatchers.IO + weatherViewModel.coroutineExceptionHandler).launch {
+                weatherViewModel.getForecastData(tempVar)
             }
 
             //обновление данных
             binding.swipeRefresh.setOnRefreshListener {
-                CoroutineScope(Dispatchers.IO + mainViewModel.coroutineExceptionHandler).launch {
-                    mainViewModel.getForecastData(tempVar)
+                CoroutineScope(Dispatchers.IO + weatherViewModel.coroutineExceptionHandler).launch {
+                    weatherViewModel.getForecastData(tempVar)
                 }
                 binding.swipeRefresh.isRefreshing = false
 

@@ -4,31 +4,21 @@ import android.content.Context
 import androidx.activity.result.ActivityResultRegistry
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.weathermvvm.Utils.Permission
-import com.example.weathermvvm.data.WeatherRepositoryImpl
 import com.example.weathermvvm.data.repository.GeoPositionRepositoryImpl
-import com.example.weathermvvm.domain.UseCase.*
+import com.example.weathermvvm.domain.UseCase.GetCitySearchUseCase
+import com.example.weathermvvm.domain.UseCase.GetLocationUseCase
 
-class MainViewModelFactory(context: Context): ViewModelProvider.Factory {
-
-    private val weatherRepository = WeatherRepositoryImpl()
+class MainViewModelFactory(context: Context, activityResultRegistry: ActivityResultRegistry): ViewModelProvider.Factory {
 
     private val geoPositionRepository = GeoPositionRepositoryImpl()
     private val getLocationUseCase = GetLocationUseCase(geoPositionRepository, context)
-
-    private val changeBackgroundUseCase = ChangeBackgroundUseCase()
-
-    //private val permission = Permission(context, activityResultRegistry)
-
-    private val getForecastUseCase = GetForecastUseCase(weatherRepository)
-
+//    private val activityResultRegistry = activityResultRegistry
+//    private val getCitySearchUseCase = GetCitySearchUseCase(activityResultRegistry, )
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return MainViewModel(
             getLocationUseCase = getLocationUseCase,
-            changeBackgroundUseCase = changeBackgroundUseCase,
-            //permission = permission,
-            getForecastUseCase = getForecastUseCase,
+            //activityResultRegistry = activityResultRegistry
         ) as T
     }
 }

@@ -2,7 +2,6 @@ package com.example.weathermvvm.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -11,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.weathermvvm.databinding.ActivityMainBinding
+import com.example.weathermvvm.domain.UseCase.GetCitySearchUseCase
 import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
 import com.example.weathermvvm.presentation.adapters.VpAdapter
 import com.example.weathermvvm.presentation.viewmodel.MainViewModel
@@ -21,14 +21,17 @@ class MainActivity : AppCompatActivity() {
     lateinit var mainViewModel: MainViewModel
     val cityList: MutableList<String> = ArrayList()
     private val adapter = VpAdapter(this, cityList)
-    private var searchLauncher: ActivityResultLauncher<Intent>? = null
+
+    lateinit var citySearch : GetCitySearchUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mainViewModel = ViewModelProvider(this, MainViewModelFactory(applicationContext))
+
+
+        mainViewModel = ViewModelProvider(this, MainViewModelFactory(applicationContext, activityResultRegistry))
             .get(MainViewModel::class.java)
 
         mainViewModel.resultCoord.observe(this, Observer {
@@ -45,15 +48,10 @@ class MainActivity : AppCompatActivity() {
             binding.viewPager.currentItem = cityList.size
         }
 
-        //возможно перенести в отдельный класс
-        searchLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
-                result: ActivityResult ->
-            if(result.resultCode == RESULT_OK){
-                val city = result.data?.getSerializableExtra("city") as SearchCityItem
-                addCity(city)
-            }
-        }
-
+        //добавление города
+        citySearch = GetCitySearchUseCase(activityResultRegistry){
+            addCity(it)
+    }
 
 
         binding.btDelete.setOnClickListener {
@@ -70,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.btSearchActivity.setOnClickListener {
-            searchLauncher?.launch(Intent(this, SearchActivity::class.java))
+            citySearch.startActivity(this)
         }
 
 
@@ -78,6 +76,8 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
 }
 
 
