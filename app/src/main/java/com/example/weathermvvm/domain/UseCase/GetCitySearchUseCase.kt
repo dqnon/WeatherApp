@@ -20,6 +20,6 @@ class GetCitySearchUseCase(private val activityResultRegistry: ActivityResultReg
     }
 
     fun startActivity(context: Context){
-        getCity?.launch(Intent(context, SearchActivity::class.java))
+        getCity.launch(Intent(context, SearchActivity::class.java))
     }
 }

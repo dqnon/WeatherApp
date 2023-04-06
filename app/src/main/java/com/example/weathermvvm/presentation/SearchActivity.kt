@@ -31,7 +31,6 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
     lateinit var binding: ActivitySearchBinding
     lateinit var searchViewModel: SearchViewModel
     lateinit var adapterSearch: SearchAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
@@ -64,7 +63,9 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
     }
 
     override fun onClick(city: SearchCityItem) {
-
+//
+//        searchList.add(city.name)
+//        Log.d("SearchCityLog", "В активити $searchList")
         val i = Intent()
         i.putExtra("city", city)
         setResult(RESULT_OK, i)

@@ -1,6 +1,7 @@
 package com.example.weathermvvm.presentation.adapters
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -12,6 +13,10 @@ class VpAdapter(fa: FragmentActivity,  private val list: MutableList<String>): F
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return list[position].hashCode().toLong()
     }
 
     override fun createFragment(position: Int): Fragment {
@@ -28,6 +33,8 @@ class VpAdapter(fa: FragmentActivity,  private val list: MutableList<String>): F
     }
 
     fun deleteCity(position: Int){
+        Log.d("PosLog", "$list")
+        Log.d("PosLog", "$position")
         list.removeAt(position)
         notifyDataSetChanged()
     }

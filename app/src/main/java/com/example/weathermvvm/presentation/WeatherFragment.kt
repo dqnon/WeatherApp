@@ -1,6 +1,7 @@
 package com.example.weathermvvm.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,6 @@ import com.example.weathermvvm.presentation.viewmodel.WeatherViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
 const val ARG_CITY = "city"
 class MainFragment : Fragment() {
@@ -59,8 +59,12 @@ class MainFragment : Fragment() {
             binding.rcViewHour.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             binding.rcViewHour.adapter = adapterHour
 
+            //пролистывание до нужного элемента по времени
+            (binding.rcViewHour.layoutManager as LinearLayoutManager).scrollToPosition(
+                it.current.last_updated.substring(11, 13).toInt())
+
             adapterHour.submitList(it.forecast.forecastday[0].hour)
-            //Log.d("MyLog", "ТЕМПЕРАТУРА ${it.forecast.forecastday[0].hour}")
+            Log.d("MyLog", "ТЕМПЕРАТУРА ${it.forecast.forecastday[0].hour}")
 
             //прогноз по дням
             adapterDays = DaysAdapter(DaysAdapter.OnClickListener {
@@ -76,16 +80,17 @@ class MainFragment : Fragment() {
 
         //получение названия города для создания новых фрагментов
         arguments?.takeIf { it.containsKey(ARG_CITY) }?.apply {
-            var tempVar = getString(ARG_CITY).toString()
+            var cityArg = getString(ARG_CITY).toString()
             CoroutineScope(Dispatchers.IO + weatherViewModel.coroutineExceptionHandler).launch {
-                weatherViewModel.getForecastData(tempVar)
+                weatherViewModel.getForecastData(cityArg)
             }
 
             //обновление данных
             binding.swipeRefresh.setOnRefreshListener {
                 CoroutineScope(Dispatchers.IO + weatherViewModel.coroutineExceptionHandler).launch {
-                    weatherViewModel.getForecastData(tempVar)
+                    weatherViewModel.getForecastData(cityArg)
                 }
+                //возможно убрать?
                 binding.swipeRefresh.isRefreshing = false
 
             }

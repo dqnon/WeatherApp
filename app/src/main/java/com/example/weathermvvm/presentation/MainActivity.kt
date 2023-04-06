@@ -2,6 +2,8 @@ package com.example.weathermvvm.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -28,8 +30,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
 
         mainViewModel = ViewModelProvider(this, MainViewModelFactory(applicationContext, activityResultRegistry))
             .get(MainViewModel::class.java)
@@ -64,8 +64,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
-
-
 
         binding.btSearchActivity.setOnClickListener {
             citySearch.startActivity(this)

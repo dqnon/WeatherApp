@@ -9,5 +9,5 @@ data class SearchCityItem(
     val lon: Double,
     val name: String,
     val region: String,
-    val url: String
+    val url: String,
 ): Serializable

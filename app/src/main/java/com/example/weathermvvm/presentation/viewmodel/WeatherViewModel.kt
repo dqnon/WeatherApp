@@ -31,13 +31,16 @@ class WeatherViewModel(
 //        CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
 //            getLocationData()
 //        }
-
     }
+
+
 
     suspend fun getForecastData(city: String) {
         val forecastWeather: Forecast = getForecastUseCase.executeForecast(city)
         resultForecast.postValue(forecastWeather)
     }
+
+
 
 
     fun changeBackground(condition: String){
