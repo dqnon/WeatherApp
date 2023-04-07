@@ -7,6 +7,8 @@ import com.example.weathermvvm.domain.model.forecast.Forecast
 import com.example.weathermvvm.domain.model.searchCity.SearchCity
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Locale
+
 //попробовать перенести city в конструкторр класса------------------------------
 class WeatherRepositoryImpl: WeatherRepository {
 
@@ -15,15 +17,17 @@ class WeatherRepositoryImpl: WeatherRepository {
         .addConverterFactory(GsonConverterFactory.create()).build()
     val weatherApi = retrofit.create(WeatherApi::class.java)
 
+    val systemLanguage = Locale.getDefault().language
 
     override suspend fun getForecastWeather(city: String): Forecast {
-        val forecastWeather = weatherApi.getForecastWeather(city)
+        val forecastWeather = weatherApi.getForecastWeather(city, systemLanguage)
+
         return forecastWeather
 
     }
 
     override suspend fun getSearchList(city: String): SearchCity {
-        val searchCity = weatherApi.getSearchList(city)
+        val searchCity = weatherApi.getSearchList(city, systemLanguage)
         return searchCity
     }
 }

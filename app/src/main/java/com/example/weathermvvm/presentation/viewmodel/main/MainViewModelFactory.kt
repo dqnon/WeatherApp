@@ -1,11 +1,10 @@
-package com.example.weathermvvm.presentation.viewmodel
+package com.example.weathermvvm.presentation.viewmodel.main
 
 import android.content.Context
 import androidx.activity.result.ActivityResultRegistry
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.weathermvvm.data.repository.GeoPositionRepositoryImpl
-import com.example.weathermvvm.domain.UseCase.GetCitySearchUseCase
 import com.example.weathermvvm.domain.UseCase.GetLocationUseCase
 
 class MainViewModelFactory(context: Context, activityResultRegistry: ActivityResultRegistry): ViewModelProvider.Factory {

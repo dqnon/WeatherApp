@@ -1,22 +1,20 @@
-package com.example.weathermvvm.presentation
+package com.example.weathermvvm.presentation.screens
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
+import com.example.weathermvvm.R
 import com.example.weathermvvm.databinding.ActivityMainBinding
 import com.example.weathermvvm.domain.UseCase.GetCitySearchUseCase
 import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
 import com.example.weathermvvm.presentation.adapters.VpAdapter
-import com.example.weathermvvm.presentation.viewmodel.MainViewModel
-import com.example.weathermvvm.presentation.viewmodel.MainViewModelFactory
+import com.example.weathermvvm.presentation.viewmodel.main.MainViewModel
+import com.example.weathermvvm.presentation.viewmodel.main.MainViewModelFactory
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -31,7 +29,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mainViewModel = ViewModelProvider(this, MainViewModelFactory(applicationContext, activityResultRegistry))
+
+
+        mainViewModel = ViewModelProvider(this, MainViewModelFactory(this, activityResultRegistry))
             .get(MainViewModel::class.java)
 
         mainViewModel.resultCoord.observe(this, Observer {
@@ -53,27 +53,29 @@ class MainActivity : AppCompatActivity() {
             addCity(it)
     }
 
-
         binding.btDelete.setOnClickListener {
             val position = binding.viewPager.currentItem
-            if (position != 0){
-                adapter.deleteCity(position)
-                binding.indicator.setViewPager(binding.viewPager)
-            } else {
-                Toast.makeText(this, "Вы не можете удалить этот элемент", Toast.LENGTH_SHORT).show()
-            }
-
+            adapter.deleteCity(position)
+            binding.indicator.setViewPager(binding.viewPager)
         }
 
         binding.btSearchActivity.setOnClickListener {
             citySearch.startActivity(this)
         }
 
-
-
-
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (position == 0){
+                    binding.btDelete.visibility = View.GONE
+                } else {
+                    binding.btDelete.visibility = View.VISIBLE
+                }
+            }
+        })
 
     }
+
 
 
 }

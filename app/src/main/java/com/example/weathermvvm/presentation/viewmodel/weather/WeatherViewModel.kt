@@ -1,4 +1,4 @@
-package com.example.weathermvvm.presentation.viewmodel
+package com.example.weathermvvm.presentation.viewmodel.weather
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

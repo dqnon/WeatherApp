@@ -1,4 +1,4 @@
-package com.example.weathermvvm.presentation
+package com.example.weathermvvm.presentation.screens
 
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weathermvvm.databinding.FragmentMainBinding
 import com.example.weathermvvm.presentation.adapters.DaysAdapter
 import com.example.weathermvvm.presentation.adapters.HourAdapter
-import com.example.weathermvvm.presentation.viewmodel.WeatherViewModel
-import com.example.weathermvvm.presentation.viewmodel.WeatherViewModelFactory
+import com.example.weathermvvm.presentation.viewmodel.weather.WeatherViewModel
+import com.example.weathermvvm.presentation.viewmodel.weather.WeatherViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

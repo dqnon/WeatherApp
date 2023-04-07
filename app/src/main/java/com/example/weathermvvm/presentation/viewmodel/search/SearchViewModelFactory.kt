@@ -1,4 +1,4 @@
-package com.example.weathermvvm.presentation.viewmodel
+package com.example.weathermvvm.presentation.viewmodel.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -1,4 +1,4 @@
-package com.example.weathermvvm.presentation.viewmodel
+package com.example.weathermvvm.presentation.viewmodel.main
 
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultRegistry

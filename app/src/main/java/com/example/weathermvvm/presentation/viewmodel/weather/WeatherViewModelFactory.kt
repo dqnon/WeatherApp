@@ -1,10 +1,9 @@
-package com.example.weathermvvm.presentation.viewmodel
+package com.example.weathermvvm.presentation.viewmodel.weather
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.weathermvvm.data.WeatherRepositoryImpl
-import com.example.weathermvvm.data.repository.GeoPositionRepositoryImpl
 import com.example.weathermvvm.domain.UseCase.*
 
 class WeatherViewModelFactory(context: Context): ViewModelProvider.Factory {

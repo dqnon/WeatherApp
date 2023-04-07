@@ -7,7 +7,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
-import com.example.weathermvvm.presentation.SearchActivity
+import com.example.weathermvvm.presentation.screens.SearchActivity
 
 class GetCitySearchUseCase(private val activityResultRegistry: ActivityResultRegistry,
                            private val callback: (city: SearchCityItem) -> Unit) {

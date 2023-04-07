@@ -16,10 +16,10 @@
         android:theme="@style/Theme.WeatherMVVM"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.SearchActivity"
+            android:name=".presentation.screens.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.screens.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
