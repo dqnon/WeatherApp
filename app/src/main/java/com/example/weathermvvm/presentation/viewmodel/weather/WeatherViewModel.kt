@@ -43,7 +43,7 @@ class WeatherViewModel(
 
 
 
-    fun changeBackground(condition: String){
+    fun changeBackground(condition: Int){
         val change = changeBackgroundUseCase.changeBackground(condition)
         conditionBackGround.value = change
     }

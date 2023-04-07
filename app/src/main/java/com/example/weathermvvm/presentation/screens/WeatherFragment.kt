@@ -52,7 +52,7 @@ class MainFragment : Fragment() {
             binding.tvCondition.text = it.current.condition.text
             binding.tvLastUpdated.text = it.current.last_updated
 
-            weatherViewModel.changeBackground(it.current.condition.text)
+            weatherViewModel.changeBackground(it.current.condition.code)
 
             //прогноз по часам
             adapterHour = HourAdapter()

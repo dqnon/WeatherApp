@@ -4,23 +4,22 @@ import com.example.weathermvvm.R
 
 class ChangeBackgroundUseCase() {
 
-    fun changeBackground(condition: String): Int {
+    fun changeBackground(condition: Int): Int {
 
         var path = when (condition) {
-            "Sunny" -> R.drawable.sunny
+            1000 -> R.drawable.sunny
 
-            "Light Rain" -> R.drawable.light_rain
+            1183, 1180, 1186, 1189, 1192, 1195, 1198 -> R.drawable.rain
 
-            "Mist", "Fog" -> R.drawable.mist
+            1030, 1135, 1147 -> R.drawable.mist
 
-            "Patchy snow possible",
-            "Blowing snow",
-            "Patchy light snow",
-            "Light snow",
-            "Heavy snow"
-            -> R.drawable.snow
+            1210, 1213, 1216, 1219, 1222, 1225, 1255, 1258 -> R.drawable.snow
 
-            "Overcast" -> R.drawable.overcast
+            1009 -> R.drawable.overcast
+
+            1006, 1003 -> R.drawable.cloudy
+
+            1273, 1276, 1279, 1282 -> R.drawable.thunder
 
             else -> R.drawable.weather
         }
