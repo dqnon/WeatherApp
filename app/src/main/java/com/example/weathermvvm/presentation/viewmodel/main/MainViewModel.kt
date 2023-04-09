@@ -20,18 +20,6 @@ class MainViewModel(private val getLocationUseCase: GetLocationUseCase,
     }
 
     val resultCoord = MutableLiveData<String>()
-//    val resultSearchCity = MutableLiveData<SearchCityItem>()
-
-
-
-
-//    fun setCitySearch(): GetCitySearchUseCase{
-//        val result = GetCitySearchUseCase(activityResultRegistry){
-//            resultSearchCity.value = it
-//        }
-//        return result
-//    }
-
 
 
     fun getLatLon(coord: String){

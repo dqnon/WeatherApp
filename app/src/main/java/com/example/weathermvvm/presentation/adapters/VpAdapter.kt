@@ -20,6 +20,7 @@ class VpAdapter(fa: FragmentActivity,  private val list: MutableList<String>): F
         return list[position].hashCode().toLong()
     }
 
+
     override fun createFragment(position: Int): Fragment {
         val fragment = MainFragment()
         fragment.arguments = Bundle().apply {

@@ -1,6 +1,7 @@
 package com.example.weathermvvm.presentation.screens
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var mainViewModel: MainViewModel
     val cityList: MutableList<String> = ArrayList()
+
     private val adapter = VpAdapter(this, cityList)
 
     lateinit var citySearch : GetCitySearchUseCase
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             cityList.add(it)
             binding.viewPager.adapter = adapter
             binding.indicator.setViewPager(binding.viewPager)
+
         })
 
         fun addCity(city: SearchCityItem){
@@ -46,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             binding.indicator.setViewPager(binding.viewPager)
             //открытие страницы с выбранным городом
             binding.viewPager.currentItem = cityList.size
+            Log.d("CityLog", "$cityList")
         }
 
         //добавление города
@@ -63,13 +67,16 @@ class MainActivity : AppCompatActivity() {
             citySearch.startActivity(this)
         }
 
+        //скрытие кнопки удаления
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 if (position == 0){
-                    binding.btDelete.visibility = View.GONE
+                    binding.btDelete.setImageResource(R.drawable.location_image)
+                    binding.btDelete.isClickable = false
                 } else {
-                    binding.btDelete.visibility = View.VISIBLE
+                    binding.btDelete.setImageResource(R.drawable.delete_city)
+                    binding.btDelete.isClickable = true
                 }
             }
         })
