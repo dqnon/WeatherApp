@@ -5,12 +5,13 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.adapter.FragmentViewHolder
+import com.example.weathermvvm.db.WeatherItem
 import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
 import com.example.weathermvvm.presentation.screens.ARG_CITY
 import com.example.weathermvvm.presentation.screens.MainFragment
 
-class VpAdapter(fa: FragmentActivity,  private val list: MutableList<String>): FragmentStateAdapter(fa) {
+class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
+    var list = mutableListOf<WeatherItem>(WeatherItem(null, ""))
 
     override fun getItemCount(): Int {
         return list.size
@@ -24,13 +25,14 @@ class VpAdapter(fa: FragmentActivity,  private val list: MutableList<String>): F
     override fun createFragment(position: Int): Fragment {
         val fragment = MainFragment()
         fragment.arguments = Bundle().apply {
-            putString(ARG_CITY, list[position])
+            putString(ARG_CITY, list[position].city)
         }
         return fragment
     }
 
     fun addCity(cityItem: SearchCityItem) {
-        list.add(cityItem.name)
+        //list.add(cityItem.name)
+        list.add(WeatherItem(null, cityItem.name))
         notifyDataSetChanged()
     }
 
@@ -42,5 +44,9 @@ class VpAdapter(fa: FragmentActivity,  private val list: MutableList<String>): F
     }
 
 
+    fun setCityList(listCity: MutableList<WeatherItem>){
+        list = (list + listCity).toMutableList()
+        notifyDataSetChanged()
+    }
 
 }

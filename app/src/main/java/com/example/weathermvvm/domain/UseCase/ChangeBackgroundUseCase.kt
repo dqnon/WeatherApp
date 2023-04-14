@@ -9,7 +9,7 @@ class ChangeBackgroundUseCase() {
         var path = when (condition) {
             1000 -> R.drawable.sunny
 
-            1183, 1180, 1186, 1189, 1192, 1195, 1198 -> R.drawable.rain
+            1183, 1180, 1186, 1189, 1192, 1195, 1198, 1063 -> R.drawable.rain
 
             1030, 1135, 1147 -> R.drawable.mist
 
