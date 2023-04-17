@@ -1,5 +1,5 @@
 # WeatherApp
-init
+Here you can just watch the weather forecast, nothing special
 # Description
 
 <p>The app is using
