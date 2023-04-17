@@ -1,45 +1,55 @@
 package com.example.weathermvvm.presentation.viewmodel.main
 
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultRegistry
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import com.example.weathermvvm.db.Dao
-import com.example.weathermvvm.db.WeatherDb
+import androidx.lifecycle.*
 import com.example.weathermvvm.db.WeatherItem
-import com.example.weathermvvm.domain.UseCase.GetCitySearchUseCase
 import com.example.weathermvvm.domain.UseCase.GetLocationUseCase
 import com.example.weathermvvm.domain.UseCase.SaveCityListUseCase
-import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 class MainViewModel(private val getLocationUseCase: GetLocationUseCase,
                     //private val activityResultRegistry: ActivityResultRegistry,
                     private val saveCityListUseCase: SaveCityListUseCase,
-                    private val db: Dao
+
 
 ): ViewModel() {
 
+    val resultCoord = MutableLiveData<String>()
+    val allItemsCity = MutableLiveData<MutableList<WeatherItem>>()
+
     init {
         //initDataBase()
+        viewModelScope.launch(Dispatchers.IO) {
+            getAllItems()
+        }
+
         getLocationData()
+
     }
 
-    val resultCoord = MutableLiveData<String>()
+    fun addCityRoom(city: WeatherItem, onSuccess:() -> Unit) =
+        viewModelScope.launch(Dispatchers.IO) {
+            saveCityListUseCase.executeRoom().saveCity(city){
+                onSuccess()
+            }
+        }
 
-    //val dbRoom = MutableLiveData<LiveData<List<WeatherItem>>>()
-
+    fun delCityRoom(city: WeatherItem, onSuccess:() -> Unit) =
+        viewModelScope.launch(Dispatchers.IO) {
+            saveCityListUseCase.executeRoom().deleteCity(city){
+                onSuccess()
+            }
+        }
 
     fun initDataBase(){
         //пока в MA
     }
 
-    fun getAllItems(): LiveData<MutableList<WeatherItem>> {
-        return saveCityListUseCase.executeRoom().allNotes
+    fun getAllItems() {
+        val result = saveCityListUseCase.executeRoom().allNotes
+        allItemsCity.postValue(result)
     }
 
 
@@ -54,4 +64,6 @@ class MainViewModel(private val getLocationUseCase: GetLocationUseCase,
             getLatLon("${it.result.latitude}, ${it.result.longitude}")
         }
     }
+
+
 }

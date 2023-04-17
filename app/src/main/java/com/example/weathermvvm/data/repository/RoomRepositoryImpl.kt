@@ -10,7 +10,7 @@ import com.example.weathermvvm.domain.repository.RoomRepository
 import kotlinx.coroutines.flow.Flow
 
 class RoomRepositoryImpl(private val weatherDao: Dao): RoomRepository {
-    override val allNotes: LiveData<MutableList<WeatherItem>>
+    override val allNotes: MutableList<WeatherItem>
         get() = weatherDao.getAllItem()
 
 

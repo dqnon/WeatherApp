@@ -17,6 +17,7 @@ interface Dao {
     suspend fun deleteCity(item: WeatherItem)
 
     @Query("SELECT * FROM weather")
-    fun getAllItem(): LiveData<MutableList<WeatherItem>>
+    fun getAllItem(): MutableList<WeatherItem>
+
 
 }

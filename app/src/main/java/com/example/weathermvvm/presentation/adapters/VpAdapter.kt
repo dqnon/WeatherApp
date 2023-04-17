@@ -1,5 +1,6 @@
 package com.example.weathermvvm.presentation.adapters
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,14 +14,21 @@ import com.example.weathermvvm.presentation.screens.MainFragment
 class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
     var list = mutableListOf<WeatherItem>(WeatherItem(null, ""))
 
+
+    fun setCityList(listCity:  MutableList<WeatherItem>){
+        list.clear()
+        list += listCity
+    }
+
+
     override fun getItemCount(): Int {
+        Log.d("adapLog", "$list")
         return list.size
     }
 
     override fun getItemId(position: Int): Long {
         return list[position].hashCode().toLong()
     }
-
 
     override fun createFragment(position: Int): Fragment {
         val fragment = MainFragment()
@@ -30,8 +38,8 @@ class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
         return fragment
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun addCity(cityItem: SearchCityItem) {
-        //list.add(cityItem.name)
         list.add(WeatherItem(null, cityItem.name))
         notifyDataSetChanged()
     }
@@ -40,12 +48,6 @@ class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
         Log.d("PosLog", "$list")
         Log.d("PosLog", "$position")
         list.removeAt(position)
-        notifyDataSetChanged()
-    }
-
-
-    fun setCityList(listCity: MutableList<WeatherItem>){
-        list = (list + listCity).toMutableList()
         notifyDataSetChanged()
     }
 

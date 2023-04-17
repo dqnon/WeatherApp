@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RoomRepository {
 
-    val allNotes: LiveData<MutableList<WeatherItem>>
+    val allNotes: MutableList<WeatherItem>
 
     suspend fun saveCity(item: WeatherItem, onSuccess:() -> Unit)
 

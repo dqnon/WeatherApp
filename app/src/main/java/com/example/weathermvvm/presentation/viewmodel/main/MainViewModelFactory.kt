@@ -28,7 +28,7 @@ class MainViewModelFactory(context: Context, activityResultRegistry: ActivityRes
             getLocationUseCase = getLocationUseCase,
             //activityResultRegistry = activityResultRegistry,
             saveCityListUseCase = saveCityListUseCase,
-            db = db
+
         ) as T
     }
 }

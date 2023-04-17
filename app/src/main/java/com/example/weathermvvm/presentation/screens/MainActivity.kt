@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.viewpager2.widget.ViewPager2
 import com.example.weathermvvm.R
 import com.example.weathermvvm.databinding.ActivityMainBinding
@@ -18,14 +19,12 @@ import com.example.weathermvvm.presentation.viewmodel.main.MainViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.coroutines.coroutineContext
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var mainViewModel: MainViewModel
-    //val cityList: MutableList<String> = mutableListOf("")
-
     private val adapter = VpAdapter(this)
-
     lateinit var citySearch : GetCitySearchUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,27 +32,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         mainViewModel = ViewModelProvider(this, MainViewModelFactory(this, activityResultRegistry))
             .get(MainViewModel::class.java)
 
-        mainViewModel.resultCoord.observe(this, Observer {
-            adapter.list[0] = WeatherItem(null, it)
-            //cityList[0] = it
+        mainViewModel.resultCoord.observe(this, Observer { location ->
+            adapter.list[0] = WeatherItem(null, location)
             binding.viewPager.adapter = adapter
             binding.indicator.setViewPager(binding.viewPager)
         })
 
-        //db
-        val db = WeatherDb.getDb(this)
-
-        mainViewModel.getAllItems().observe(this, Observer { list ->
-            list.forEach {
-                adapter.list.add(it)
-            }
-                //adapter.setCityList(list)
+        mainViewModel.allItemsCity.observe(this, Observer { list ->
+                list.forEach {
+                    adapter.list.add(it)
+                }
         })
-
 
         fun addCity(city: SearchCityItem){
             adapter.addCity(city)
@@ -62,32 +54,31 @@ class MainActivity : AppCompatActivity() {
             //открытие страницы с выбранным городом
             binding.viewPager.currentItem = adapter.list.size
             Log.d("CityLog", "${adapter.list.size}")
+            Log.d("buglog", "${adapter.list}")
         }
 
         //добавление города
-        citySearch = GetCitySearchUseCase(activityResultRegistry){
-            addCity(it)
-            //bd
+        //перенести в вьюмонль
+        citySearch = GetCitySearchUseCase(activityResultRegistry) {
+
+            //добавление в бд
             val itemWeather = WeatherItem(null, it.name)
-            CoroutineScope(Dispatchers.IO).launch {
-                db.getDao().insertWeather(itemWeather)
-            }
-            //bd2
+            mainViewModel.addCityRoom(itemWeather) {}
+            Log.d("adapLog1", "$itemWeather")
+
+            //добавление в массив
+            addCity(it)
+            Log.d("adapLog1", "$it")
     }
+
         //удаление города
         binding.btDelete.setOnClickListener {
             val position = binding.viewPager.currentItem
-
-            //bd
-            CoroutineScope(Dispatchers.IO).launch {
-                Log.d("dblog", "ДО ${position}")
-                db.getDao().deleteCity(adapter.list[position])
-                runOnUiThread {
-                    adapter.deleteCity(position)
-                    binding.indicator.setViewPager(binding.viewPager)
-                }
-            }
-            //bd2
+            //удаление из бд
+            mainViewModel.delCityRoom(adapter.list[position]){}
+            //удаление из массива
+            adapter.deleteCity(position)
+            binding.indicator.setViewPager(binding.viewPager)
         }
 
         binding.btSearchActivity.setOnClickListener {
