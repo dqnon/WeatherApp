@@ -12,8 +12,9 @@ import com.example.weathermvvm.presentation.screens.SearchActivity
 class GetCitySearchUseCase(private val activityResultRegistry: ActivityResultRegistry,
                            private val callback: (city: SearchCityItem) -> Unit) {
 
-    private val getCity: ActivityResultLauncher<Intent> =
-        activityResultRegistry.register("city1", ActivityResultContracts.StartActivityForResult()){
+    val getCity: ActivityResultLauncher<Intent> =
+        activityResultRegistry.register("city1", ActivityResultContracts.StartActivityForResult())
+        {
             if(it.resultCode == RESULT_OK) {
                 callback(it.data?.getSerializableExtra("city") as SearchCityItem)
             }

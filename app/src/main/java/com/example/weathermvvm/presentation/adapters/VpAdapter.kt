@@ -6,17 +6,16 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.weathermvvm.db.WeatherItem
+import com.example.weathermvvm.db.CityList.WeatherCityItem
 import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
 import com.example.weathermvvm.presentation.screens.ARG_CITY
 import com.example.weathermvvm.presentation.screens.MainFragment
 
 class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
-    var list = mutableListOf<WeatherItem>(WeatherItem(null, ""))
+    var list = mutableListOf<WeatherCityItem>()
 
 
-    fun setCityList(listCity:  MutableList<WeatherItem>){
-        list.clear()
+    fun setCityList(listCity:  MutableList<WeatherCityItem>){
         list += listCity
     }
 
@@ -39,11 +38,12 @@ class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addCity(cityItem: SearchCityItem) {
-        list.add(WeatherItem(null, cityItem.name))
+    fun addCity(cityItem: WeatherCityItem) {
+        list.add(cityItem)
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun deleteCity(position: Int){
         Log.d("PosLog", "$list")
         Log.d("PosLog", "$position")

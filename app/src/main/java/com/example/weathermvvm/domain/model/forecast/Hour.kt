@@ -1,9 +1,12 @@
 package com.example.weathermvvm.domain.model.forecast
 
+import androidx.room.Embedded
+
 data class Hour(
     val chance_of_rain: Int,
     val chance_of_snow: Int,
     val cloud: Int,
+    @Embedded
     val condition: Condition,
     val dewpoint_c: Double,
     val dewpoint_f: Double,

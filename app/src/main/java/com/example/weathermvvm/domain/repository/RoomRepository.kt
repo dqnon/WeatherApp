@@ -1,14 +1,15 @@
 package com.example.weathermvvm.domain.repository
 
-import androidx.lifecycle.LiveData
-import com.example.weathermvvm.db.WeatherItem
-import kotlinx.coroutines.flow.Flow
+import com.example.weathermvvm.db.CityList.WeatherCityItem
 
 interface RoomRepository {
 
-    val allNotes: MutableList<WeatherItem>
+    val allNotes: MutableList<WeatherCityItem>
 
-    suspend fun saveCity(item: WeatherItem, onSuccess:() -> Unit)
+    suspend fun saveCity(item: WeatherCityItem, onSuccess:() -> Unit)
 
-    suspend fun deleteCity(item: WeatherItem, onSuccess:() -> Unit)
+    suspend fun deleteCity(item: WeatherCityItem, onSuccess:() -> Unit)
+
+    suspend fun updateGeoLocation(item: String, geoLocation: Int, onSuccess:() -> Unit)
+
 }

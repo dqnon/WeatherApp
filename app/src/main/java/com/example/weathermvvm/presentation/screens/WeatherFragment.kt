@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weathermvvm.data.toRoomModel
 import com.example.weathermvvm.databinding.FragmentMainBinding
+import com.example.weathermvvm.db.FragmentItem
 import com.example.weathermvvm.presentation.adapters.DaysAdapter
 import com.example.weathermvvm.presentation.adapters.HourAdapter
 import com.example.weathermvvm.presentation.viewmodel.weather.WeatherViewModel
@@ -75,6 +77,12 @@ class MainFragment : Fragment() {
             binding.rcViewDays.adapter = adapterDays
 
             adapterDays.submitList(it.forecast.forecastday)
+
+            //УБРАТЬ=-------------------------------------------------------------
+            //var testFr = FragmentItem(null, it.location.name)
+            CoroutineScope(Dispatchers.IO).launch {
+                weatherViewModel.saveFragment(it.toRoomModel())
+            }
 
         })
 

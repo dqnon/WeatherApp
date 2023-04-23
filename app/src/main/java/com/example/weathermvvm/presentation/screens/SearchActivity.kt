@@ -3,6 +3,7 @@ package com.example.weathermvvm.presentation.screens
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -41,6 +42,7 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
                 CoroutineScope(Dispatchers.IO).launch {
                     searchViewModel.getCityList(query.toString())
                 }
+                binding.imageView.visibility = View.INVISIBLE
                 return true
             }
 
