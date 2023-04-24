@@ -22,6 +22,7 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
     lateinit var binding: ActivitySearchBinding
     lateinit var searchViewModel: SearchViewModel
     lateinit var adapterSearch: SearchAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)

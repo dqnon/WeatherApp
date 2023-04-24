@@ -60,9 +60,8 @@ class DaysAdapter(private val onClickListener: OnClickListener): ListAdapter<For
         holder.itemView.setOnClickListener {
             onClickListener.onClick(item)
 
-            selectedPosition=position
+            selectedPosition = position
             notifyDataSetChanged()
-
         }
 
 

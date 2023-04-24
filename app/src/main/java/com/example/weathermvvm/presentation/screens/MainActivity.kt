@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
             mainViewModel.addCityRoom(geoLocationItem){}
 
             binding.viewPager.adapter = adapter
+
             binding.indicator.setViewPager(binding.viewPager)
         })
 
@@ -54,9 +55,8 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.allItemsCity.observe(this, Observer { list ->
             adapter.list = list
+            binding.viewPager.offscreenPageLimit = adapter.list.size/2
 
-
-            Log.d("RoomLog", "СПИСОК ${list}")
             //удаление города
             binding.btDelete.setOnClickListener {
                 val position = binding.viewPager.currentItem
@@ -71,7 +71,6 @@ class MainActivity : AppCompatActivity() {
             //добавление города
             //перенести в вьюмодель
             citySearch = GetCitySearchUseCase(activityResultRegistry) {
-
                 //добавление в бд
                 val itemWeather = WeatherCityItem(null, it.name)
                 mainViewModel.addCityRoom(itemWeather) {}
@@ -81,11 +80,6 @@ class MainActivity : AppCompatActivity() {
                 Log.d("adapLog1", "$it")
             }
         })
-
-
-
-
-
 
         binding.btSearchActivity.setOnClickListener {
             citySearch.startActivity(this)
@@ -105,9 +99,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
-
-
 }
 
 
