@@ -15,9 +15,9 @@ class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
     var list = mutableListOf<WeatherCityItem>()
 
 
-    fun setCityList(listCity:  MutableList<WeatherCityItem>){
-        list += listCity
-    }
+//    fun setCityList(listCity:  MutableList<WeatherCityItem>){
+//        list += listCity
+//    }
 
 
     override fun getItemCount(): Int {

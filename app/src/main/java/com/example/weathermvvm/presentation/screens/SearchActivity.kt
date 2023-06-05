@@ -28,15 +28,20 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        searchViewModel = ViewModelProvider(this, SearchViewModelFactory()).get(SearchViewModel::class.java)
+        searchViewModel = ViewModelProvider(this, SearchViewModelFactory(this)).get(SearchViewModel::class.java)
 
-        searchViewModel.resultSearch.observe(this, Observer {
+        searchViewModel.resultSearch.observe(this) { listSearch ->
             adapterSearch = SearchAdapter(this)
-            binding.rcViewSearch.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            binding.rcViewSearch.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             binding.rcViewSearch.adapter = adapterSearch
 
-            adapterSearch.submitList(it)
-        })
+            adapterSearch.submitList(listSearch)
+//            searchViewModel.allItemsCity.observe(this, Observer { roomList ->
+//                adapterSearch.
+//            })
+
+        }
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {

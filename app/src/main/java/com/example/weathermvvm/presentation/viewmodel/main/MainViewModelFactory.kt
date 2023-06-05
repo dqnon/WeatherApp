@@ -7,6 +7,7 @@ import androidx.activity.result.ActivityResultRegistry
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
+import com.example.weathermvvm.Utils.Permission
 import com.example.weathermvvm.data.repository.GeoPositionRepositoryImpl
 import com.example.weathermvvm.data.repository.RoomRepositoryImpl
 import com.example.weathermvvm.db.WeatherDb
@@ -29,6 +30,7 @@ class MainViewModelFactory(context: Context, activityResultRegistry: ActivityRes
     private val db = WeatherDb.getDb(context).getDao()
     private val roomRepository = RoomRepositoryImpl(db)
     private val saveCityListUseCase = SaveCityListUseCase(roomRepository)
+    private val permission = Permission(context, activityResultRegistry)
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return MainViewModel(
@@ -38,6 +40,7 @@ class MainViewModelFactory(context: Context, activityResultRegistry: ActivityRes
             getCitySearchUseCase = getCitySearchUseCase,
             //someActivityResultLauncher = activityResultLauncher
         //activityResultRegistry = activityResultRegistry
+            permission = permission
         ) as T
     }
 }

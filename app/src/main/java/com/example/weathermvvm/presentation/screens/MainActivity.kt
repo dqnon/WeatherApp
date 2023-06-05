@@ -1,5 +1,6 @@
 package com.example.weathermvvm.presentation.screens
 
+import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.example.weathermvvm.presentation.viewmodel.main.MainViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -35,7 +37,12 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.resultCoord.observe(this, Observer { location ->
             //adapter.list[0] = cityItem
 
-            var geoLocationItem = WeatherCityItem(id = 1, city = location)
+            val geocoder = Geocoder(this, Locale.getDefault())
+            val addresses = geocoder.getFromLocation(location[0], location[1], 1)
+            val cityName = addresses?.get(0)?.locality
+
+            var geoLocationItem = WeatherCityItem(id = 1, city = cityName!!)
+
             mainViewModel.addCityRoom(geoLocationItem){}
 
             binding.viewPager.adapter = adapter
@@ -55,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
         mainViewModel.allItemsCity.observe(this, Observer { list ->
             adapter.list = list
-            binding.viewPager.offscreenPageLimit = adapter.list.size/2
+            //binding.viewPager.offscreenPageLimit = adapter.list.size
 
             //удаление города
             binding.btDelete.setOnClickListener {
@@ -99,6 +106,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
 }
 
 

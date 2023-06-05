@@ -9,6 +9,7 @@ fun Forecast.toRoomModel() = RoomModel(
     conditionText = this.current.condition.text,
     conditionCode = this.current.condition.code,
     lastUpdated = this.current.last_updated,
-    forecastday = this.forecast.forecastday
-
+    forecastday = this.forecast.forecastday,
+    lat = this.location.lat,
+    lon = this.location.lon
 )

@@ -19,8 +19,5 @@ class RoomRepositoryImpl(private val weatherDao: Dao): RoomRepository {
         onSuccess()
     }
 
-    override suspend fun updateGeoLocation(item: String, geoLocation: Int, onSuccess: () -> Unit) {
-        weatherDao.updateGeolocation(item, geoLocation)
-        onSuccess()
-    }
+
 }

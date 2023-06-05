@@ -3,6 +3,7 @@ package com.example.weathermvvm.Utils
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.ActivityResultRegistry
@@ -34,9 +35,12 @@ class Permission(
 
         pLauncher = activityResultRegistry.register(REGISTER_KEY, ActivityResultContracts.RequestPermission()){
             if(it){
-                Toast.makeText(context, "location run", Toast.LENGTH_SHORT).show()
+
+                //Toast.makeText(context, "location run", Toast.LENGTH_SHORT).show()
+                Log.d("permissionLog", "location run")
             } else {
-                Toast.makeText(context, "allow access to geolocation for the application to work correctly", Toast.LENGTH_LONG).show()
+                //Toast.makeText(context, "allow access to geolocation for the application to work correctly", Toast.LENGTH_LONG).show()
+                Log.d("permissionLog", "allow access to geolocation for the application to work correctly")
             }
         }
 

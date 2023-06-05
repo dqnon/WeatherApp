@@ -10,6 +10,5 @@ interface RoomRepository {
 
     suspend fun deleteCity(item: WeatherCityItem, onSuccess:() -> Unit)
 
-    suspend fun updateGeoLocation(item: String, geoLocation: Int, onSuccess:() -> Unit)
 
 }

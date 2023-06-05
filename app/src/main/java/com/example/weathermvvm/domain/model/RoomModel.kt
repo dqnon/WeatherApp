@@ -14,5 +14,8 @@ data class RoomModel (
     val conditionText: String,
     val conditionCode: Int,
     val lastUpdated: String,
-    val forecastday: List<Forecastday>
+    val forecastday: List<Forecastday>,
+    val lat: Double,
+    val lon: Double,
+
         )

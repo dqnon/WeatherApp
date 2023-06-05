@@ -11,9 +11,6 @@ interface Dao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertWeather(item: WeatherCityItem)
 
-    @Query("UPDATE weather SET city = :item WHERE :geoLocation = 1")
-    suspend fun updateGeolocation(item: String, geoLocation: Int)
-
     @Delete
     suspend fun deleteCity(item: WeatherCityItem)
 

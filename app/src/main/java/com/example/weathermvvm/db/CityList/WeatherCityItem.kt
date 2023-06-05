@@ -10,4 +10,5 @@ data class WeatherCityItem (
     val id: Int? = null,
     @ColumnInfo(name = "city")
     val city: String = "",
+
         )
