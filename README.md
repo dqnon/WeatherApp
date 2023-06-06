@@ -6,6 +6,7 @@ Here you can just watch the weather forecast, nothing special
 * Kotlin coroutines
 * Retrofit
 * Room
+* Picasso
 * Androix: ViewPager2, RecyclerView, ViewModel, LiveData
 
 # Description
@@ -22,3 +23,9 @@ Here you can just watch the weather forecast, nothing special
 </ul>
 
 <img src="https://i.imgur.com/q5fg6AS.png">
+
+
+<video width="640" height="480" controls>
+  <source src="https://i.imgur.com/mKQCRJR.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
