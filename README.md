@@ -9,7 +9,7 @@ Here you can just watch the weather forecast, nothing special
 * Retrofit
 * Room
 * Picasso
-* Androix: ViewPager2, RecyclerView, ViewModel, LiveData
+* Androidx: ViewPager2, RecyclerView, ViewModel, LiveData
 
 
 # Description
