@@ -1,7 +1,7 @@
 # WeatherApp
 Here you can just watch the weather forecast, nothing special
 
-<img src="https://i.imgur.com/q5fg6AS.png">
+<img src="https://i.imgur.com/6czdT2V.png">
 
 # TechStack
 * Clean architecture, MVVM
