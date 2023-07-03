@@ -7,21 +7,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.weathermvvm.db.CityList.WeatherCityItem
-import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
 import com.example.weathermvvm.presentation.screens.ARG_CITY
-import com.example.weathermvvm.presentation.screens.MainFragment
+import com.example.weathermvvm.presentation.screens.WeatherFragment
 
 class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
     var list = mutableListOf<WeatherCityItem>()
 
-
-//    fun setCityList(listCity:  MutableList<WeatherCityItem>){
-//        list += listCity
-//    }
-
-
     override fun getItemCount(): Int {
         Log.d("adapLog", "$list")
+        Log.d("ListLog", "from ViewPager: $list")
         return list.size
     }
 
@@ -30,7 +24,7 @@ class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
     }
 
     override fun createFragment(position: Int): Fragment {
-        val fragment = MainFragment()
+        val fragment = WeatherFragment()
         fragment.arguments = Bundle().apply {
             putString(ARG_CITY, list[position].city)
         }

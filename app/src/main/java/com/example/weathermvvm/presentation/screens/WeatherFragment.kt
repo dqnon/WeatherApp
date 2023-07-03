@@ -6,27 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weathermvvm.data.toRoomModel
 import com.example.weathermvvm.databinding.FragmentMainBinding
+import com.example.weathermvvm.presentation.MyDialogFragment
+import com.example.weathermvvm.presentation.ProgressState
 import com.example.weathermvvm.presentation.adapters.DaysAdapter
 import com.example.weathermvvm.presentation.adapters.HourAdapter
 import com.example.weathermvvm.presentation.viewmodel.weather.WeatherViewModel
-import com.example.weathermvvm.presentation.viewmodel.weather.WeatherViewModelFactory
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import dagger.hilt.android.AndroidEntryPoint
 
 const val ARG_CITY = "city"
-class MainFragment : Fragment() {
+@AndroidEntryPoint
+class WeatherFragment : Fragment() {
 
     private lateinit var binding: FragmentMainBinding
-    lateinit var weatherViewModel: WeatherViewModel
+    private val weatherViewModel: WeatherViewModel by viewModels()
+    //lateinit var weatherViewModel: WeatherViewModel
     lateinit var adapterHour: HourAdapter
     lateinit var adapterDays: DaysAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,8 +42,10 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        weatherViewModel = ViewModelProvider(this, WeatherViewModelFactory(requireContext()))
-            .get(WeatherViewModel::class.java)
+
+
+//        weatherViewModel = ViewModelProvider(this, WeatherViewModelFactory(requireContext()))
+//            .get(WeatherViewModel::class.java)
 
         weatherViewModel.conditionBackGround.observe(viewLifecycleOwner, Observer { imageId ->
             binding.backImage.setImageResource(imageId)
@@ -82,34 +85,45 @@ class MainFragment : Fragment() {
         })
 
 
+        weatherViewModel.state.observe(viewLifecycleOwner, Observer {state ->
+            when(state){
+                ProgressState.Loading -> {
+                    binding.tvTemperatura.visibility = View.INVISIBLE
+                    binding.tvCondition.visibility = View.INVISIBLE
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+                ProgressState.Success -> {
+                    binding.progressBar.visibility = View.INVISIBLE
+                    binding.tvTemperatura.visibility = View.VISIBLE
+                    binding.tvCondition.visibility = View.VISIBLE
+                }
+                ProgressState.Error -> {
+                    val myDialogFragment = MyDialogFragment()
+                    val manager = activity?.supportFragmentManager
+                    val transaction: FragmentTransaction = manager!!.beginTransaction()
+                    myDialogFragment.show(transaction, "dialog")
+                }
+            }
+
+        })
+
 
         //получение названия города для создания новых фрагментов
         arguments?.takeIf { it.containsKey(ARG_CITY) }?.apply {
             var cityArg = getString(ARG_CITY).toString()
 
-            val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    //weatherViewModel.getFragmentByCity(cityArg)
-                    Log.d("MyLog", "ЗДЕСЬ ДОЛЖЕН БЫТЬ РУМ")
-                }
-            }
-
-            CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
-                //weatherViewModel.getForecastData(cityArg)
-                weatherViewModel.getForecastData(cityArg)
-                //где то здесь сделать реализацию рума
-            }
+            weatherViewModel.getForecastData(cityArg)
 
             //обновление данных
             binding.swipeRefresh.setOnRefreshListener {
-                CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
-                    //weatherViewModel.getForecastData(cityArg)
-                    weatherViewModel.getForecastData(cityArg)
-                }
+                weatherViewModel.getForecastData(cityArg)
+
                 //возможно убрать?
                 binding.swipeRefresh.isRefreshing = false
 
             }
         }
     }
+
+
 }

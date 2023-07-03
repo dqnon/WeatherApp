@@ -16,31 +16,22 @@ import com.example.weathermvvm.domain.UseCase.GetLocationUseCase
 import com.example.weathermvvm.domain.UseCase.SaveCityListUseCase
 import com.example.weathermvvm.domain.model.searchCity.SearchCityItem
 
-class MainViewModelFactory(context: Context, activityResultRegistry: ActivityResultRegistry)
+class MainViewModelFactory(context: Context)
     : ViewModelProvider.Factory {
 
     private val geoPositionRepository = GeoPositionRepositoryImpl()
     private val getLocationUseCase = GetLocationUseCase(geoPositionRepository, context)
-    private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
-
-    private val getCitySearchUseCase = GetCitySearchUseCase(activityResultRegistry){}
-
-    private val activityResultRegistry = activityResultRegistry
 
     private val db = WeatherDb.getDb(context).getDao()
     private val roomRepository = RoomRepositoryImpl(db)
+
     private val saveCityListUseCase = SaveCityListUseCase(roomRepository)
-    private val permission = Permission(context, activityResultRegistry)
+
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return MainViewModel(
             getLocationUseCase = getLocationUseCase,
-            //activityResultRegistry = activityResultRegistry,
             saveCityListUseCase = saveCityListUseCase,
-            getCitySearchUseCase = getCitySearchUseCase,
-            //someActivityResultLauncher = activityResultLauncher
-        //activityResultRegistry = activityResultRegistry
-            permission = permission
         ) as T
     }
 }

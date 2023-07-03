@@ -17,17 +17,4 @@ class GetLocationUseCase(private val geoPositionRepository: GeoPositionRepositor
         return locationItem
     }
 
-
 }
-
-
-
-
-
-//        task.addOnSuccessListener {
-//            if (it != null) {
-//                bind.tvLatitude.text = "${it.latitude}" // it.longitude is a Double
-//                bind.tvLongitude.text = "${it.longitude}" // tvLongitude is a TextView
-//
-//            }
-//        }

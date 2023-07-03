@@ -9,14 +9,12 @@ class RoomRepositoryImpl(private val weatherDao: Dao): RoomRepository {
         get() = weatherDao.getAllItem()
 
 
-    override suspend fun saveCity(item: WeatherCityItem, onSuccess: () -> Unit) {
+    override suspend fun saveCity(item: WeatherCityItem) {
         weatherDao.insertWeather(item)
-        onSuccess()
     }
 
-    override suspend fun deleteCity(item: WeatherCityItem, onSuccess: () -> Unit) {
+    override suspend fun deleteCity(item: WeatherCityItem) {
         weatherDao.deleteCity(item)
-        onSuccess()
     }
 
 

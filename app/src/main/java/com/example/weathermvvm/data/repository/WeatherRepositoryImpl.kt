@@ -1,13 +1,12 @@
-package com.example.weathermvvm.data
+package com.example.weathermvvm.data.repository
 
 import com.example.weathermvvm.data.api.WeatherApi
-import com.example.weathermvvm.domain.model.RoomModel
-import com.example.weathermvvm.domain.repository.WeatherRepository
 import com.example.weathermvvm.domain.model.forecast.Forecast
 import com.example.weathermvvm.domain.model.searchCity.SearchCity
+import com.example.weathermvvm.domain.repository.WeatherRepository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.Locale
+import java.util.*
 
 
 class WeatherRepositoryImpl: WeatherRepository {
