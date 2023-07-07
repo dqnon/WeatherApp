@@ -28,10 +28,11 @@ class MainViewModelFactory(context: Context)
     private val saveCityListUseCase = SaveCityListUseCase(roomRepository)
 
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel(
-            getLocationUseCase = getLocationUseCase,
-            saveCityListUseCase = saveCityListUseCase,
-        ) as T
-    }
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//        return MainViewModel(
+//            getLocationUseCase = getLocationUseCase,
+//            saveCityListUseCase = saveCityListUseCase,
+//            getLocationUseCase2 =
+//        ) as T
+//    }
 }

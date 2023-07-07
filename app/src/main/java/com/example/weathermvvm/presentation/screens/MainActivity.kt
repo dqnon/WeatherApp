@@ -11,7 +11,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.weathermvvm.LOCATION_PERMISSION_REQUEST_CODE
 import com.example.weathermvvm.R
@@ -22,7 +21,9 @@ import com.example.weathermvvm.presentation.adapters.VpAdapter
 import com.example.weathermvvm.presentation.viewmodel.main.MainViewModel
 import com.example.weathermvvm.presentation.viewmodel.main.MainViewModelFactory
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -38,41 +39,83 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+//        mainViewModel = ViewModelProvider(this, MainViewModelFactory(this))
+//            .get(MainViewModel::class.java)
+
         //Проверка разрешения на геолокацию
         checkLocationPermission()
 
-        mainViewModel.resultCoord.observe(this, Observer { location ->
-            val geoLocationItem = WeatherCityItem(id = 1, city = "${location[0]},${location[1]}")
-            mainViewModel.addCityRoom(geoLocationItem)
+//        binding.buttonTest.setOnClickListener {
+//            CoroutineScope(Dispatchers.IO).launch {
+//                //mainViewModel.getLocationData()
+//                //mainViewModel.getLocation()
+//                mainViewModel.getAllItems()
+//            }
+//        }
+
+        fun addCity(city: WeatherCityItem){
+            adapter.addCity(city)
+            //обновление индикатора
+            binding.indicator.setViewPager(binding.viewPager)
+            //открытие страницы с выбранным городом
+            binding.viewPager.currentItem = adapter.list.size
+            Log.d("CityLog", "${adapter.list.size}")
+            Log.d("buglog", "${adapter.list}")
+
+        }
+
+        mainViewModel.locationLiveData.observe(this, Observer {
+            Log.d("locationLog", "${it?.latitude}, ${it?.longitude}")
+            val geoLocation = WeatherCityItem(1, "${it?.latitude}, ${it?.longitude}")
+            mainViewModel.addCityRoom(geoLocation)
+            addCity(geoLocation)
+            binding.viewPager.adapter = adapter
+
+            binding.indicator.setViewPager(binding.viewPager)
         })
 
         mainViewModel.allItemsCity.observe(this, Observer { list ->
             adapter.list = list
+            Log.d("listLog", "list from allItemsCity: $list")
+            //удаление города
+            binding.btDelete.setOnClickListener {
+                val position = binding.viewPager.currentItem
+                //удаление из бд
+                mainViewModel.delCityRoom(list[position])
+                Log.d("RoomLog", "${list[position]}")
+                //удаление из массива
+                adapter.deleteCity(position)
+                //binding.viewPager.adapter = adapter
+                binding.indicator.setViewPager(binding.viewPager)
+            }
+
             binding.viewPager.adapter = adapter
             binding.indicator.setViewPager(binding.viewPager)
+            //добавление города
+            //перенести в вьюмодель
+            citySearch = GetCitySearchUseCase(activityResultRegistry) {
+                //добавление в бд
+                val itemWeather = WeatherCityItem(null, it.name)
+                mainViewModel.addCityRoom(itemWeather)
+                Log.d("adapLog1", "$itemWeather")
+                //добавление в массив
+                addCity(itemWeather)
+                Log.d("adapLog1", "$it")
+//                CoroutineScope(Dispatchers.IO).launch {
+//                    mainViewModel.getAllItems()
+//                }
+            }
         })
-
-        //удаление города
-        binding.btDelete.setOnClickListener {
-            val position = binding.viewPager.currentItem
-            mainViewModel.delCityRoom(adapter.list[position])
-            Log.d("roomLog", "${adapter.list[position]}")
-            adapter.deleteCity(position)
-            binding.indicator.setViewPager(binding.viewPager)
-        }
-
-        //добавление города
-        citySearch = GetCitySearchUseCase(activityResultRegistry) {
-            val itemWeather = WeatherCityItem(null, it.name)
-            mainViewModel.addCityRoom(itemWeather)
-            adapter.addCity(itemWeather)
-            //binding.viewPager.setCurrentItem(adapter.list.lastIndex, true)
-            binding.indicator.setViewPager(binding.viewPager)
-        }
 
         binding.btSearchActivity.setOnClickListener {
             citySearch.startActivity(this)
         }
+
+
+
+
+
+
 
         //скрытие кнопки удаления на странице с геолокацией
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
@@ -93,9 +136,14 @@ class MainActivity : AppCompatActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             // Разрешение уже получено, выполняйте соответствующие действия здесь
             CoroutineScope(Dispatchers.IO).launch {
+                //mainViewModel.getLocationData()
+                mainViewModel.getLocation()
                 mainViewModel.getAllItems()
-                mainViewModel.getLocationData()
+                runOnUiThread{
+                    binding.viewPager.adapter = adapter
+                }
             }
+
         } else {
             // Разрешение не получено, запросите его у пользователя
             ActivityCompat.requestPermissions(
@@ -111,11 +159,15 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 CoroutineScope(Dispatchers.IO).launch {
+                    //mainViewModel.getLocationData()
+                    mainViewModel.getLocation()
+                    Log.d("listLog", "${adapter.list} 2.0")
                     mainViewModel.getAllItems()
-                    mainViewModel.getLocationData()
                 }
             } else {
-                Toast.makeText(this, "Разрешение не получено", Toast.LENGTH_SHORT).show()
+                runOnUiThread {
+                    Toast.makeText(this, "Разрешение не получено", Toast.LENGTH_SHORT).show()
+                }
                 Log.e("PermLog", "Разрешение не получено")
             }
         }

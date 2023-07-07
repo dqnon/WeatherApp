@@ -25,18 +25,20 @@ class WeatherViewModel @Inject constructor(
     var state = MutableLiveData<ProgressState>(ProgressState.Success)
 
     fun getForecastData(city: String) {
-        viewModelScope.launch {
             state.postValue(ProgressState.Loading)
             try {
-                val forecastWeather: RoomModel = getForecastUseCase.executeForecast(city).toRoomModel()
-                resultForecast.postValue(forecastWeather)
-                state.postValue(ProgressState.Success)
+                viewModelScope.launch {
+                    val forecastWeather: RoomModel = getForecastUseCase.executeForecast(city).toRoomModel()
+                    resultForecast.postValue(forecastWeather)
+                    state.postValue(ProgressState.Success)
+                }
+
             } catch (t: Throwable){
-                Log.e("Test", "${t.message}: $t")
+                Log.e("TestWeather", "WeatherViewModel: ${t.message}: $t")
                 state.postValue(ProgressState.Error)
             }
 
-        }
+
 
     }
 

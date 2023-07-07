@@ -3,6 +3,7 @@ package com.example.weathermvvm.data.repository
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import android.util.Log
 import com.example.weathermvvm.domain.repository.GeoPositionRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -21,4 +22,6 @@ class GeoPositionRepositoryImpl: GeoPositionRepository {
         }
         return task
     }
+
+
 }

@@ -22,12 +22,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@AndroidEntryPoint
+//@AndroidEntryPoint
 class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
 
     lateinit var binding: ActivitySearchBinding
-    //lateinit var searchViewModel: SearchViewModel
-    private val searchViewModel: SearchViewModel by viewModels()
+    lateinit var searchViewModel: SearchViewModel
+    //private val searchViewModel: SearchViewModel by viewModels()
     lateinit var adapterSearch: SearchAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +35,7 @@ class SearchActivity : AppCompatActivity(), SearchAdapter.Listener {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //searchViewModel = ViewModelProvider(this, SearchViewModelFactory()).get(SearchViewModel::class.java)
+        searchViewModel = ViewModelProvider(this, SearchViewModelFactory(this)).get(SearchViewModel::class.java)
 
         searchViewModel.resultSearch.observe(this) { listSearch ->
             adapterSearch = SearchAdapter(this)

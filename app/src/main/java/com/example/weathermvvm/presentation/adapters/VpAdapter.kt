@@ -15,7 +15,6 @@ class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
 
     override fun getItemCount(): Int {
         Log.d("adapLog", "$list")
-        Log.d("ListLog", "from ViewPager: $list")
         return list.size
     }
 
@@ -34,7 +33,7 @@ class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
     @SuppressLint("NotifyDataSetChanged")
     fun addCity(cityItem: WeatherCityItem) {
         list.add(cityItem)
-        notifyDataSetChanged()
+        notifyItemInserted(list.size+1)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -42,7 +41,7 @@ class VpAdapter(fa: FragmentActivity ): FragmentStateAdapter(fa) {
         Log.d("PosLog", "$list")
         Log.d("PosLog", "$position")
         list.removeAt(position)
-        notifyDataSetChanged()
+        notifyItemRemoved(position)
     }
 
 }

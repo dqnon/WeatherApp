@@ -9,14 +9,19 @@ import com.example.weathermvvm.db.WeatherDb
 import com.example.weathermvvm.domain.UseCase.GetSearchListUseCase
 import com.example.weathermvvm.domain.UseCase.SaveCityListUseCase
 
-class SearchViewModelFactory(): ViewModelProvider.Factory {
+class SearchViewModelFactory(context: Context): ViewModelProvider.Factory {
 
     private val weatherRepository = WeatherRepositoryImpl()
     private val getSearchListUseCase = GetSearchListUseCase(weatherRepository)
 
+    private val db = WeatherDb.getDb(context).getDao()
+    private val roomRepository = RoomRepositoryImpl(db)
+    private val saveCityListUseCase = SaveCityListUseCase(roomRepository)
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return SearchViewModel(
             getSearchListUseCase = getSearchListUseCase,
+            saveCityListUseCase = saveCityListUseCase,
         ) as T
     }
 }

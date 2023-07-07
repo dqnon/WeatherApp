@@ -3,6 +3,7 @@ package com.example.weathermvvm.di
 import android.content.Context
 import com.example.weathermvvm.domain.UseCase.*
 import com.example.weathermvvm.domain.repository.GeoPositionRepository
+import com.example.weathermvvm.domain.repository.LocationRepository
 import com.example.weathermvvm.domain.repository.RoomRepository
 import com.example.weathermvvm.domain.repository.WeatherRepository
 import dagger.Module
@@ -38,5 +39,10 @@ class DomainModule {
     @Provides
     fun provideGetForecastUseCase(weatherRepository: WeatherRepository): GetForecastUseCase{
         return GetForecastUseCase(weatherRepository)
+    }
+
+    @Provides
+    fun provideGetLocationUseCase2(locationRepository: LocationRepository): GetLocationUseCase2{
+        return GetLocationUseCase2(locationRepository)
     }
 }

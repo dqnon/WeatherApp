@@ -15,15 +15,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class SearchViewModel @Inject constructor(
+//@HiltViewModel
+class SearchViewModel /*@Inject constructor*/(
     private val getSearchListUseCase: GetSearchListUseCase,
+    private val saveCityListUseCase: SaveCityListUseCase,
 ): ViewModel() {
 
-
+    val allItemsCity = MutableLiveData<MutableList<WeatherCityItem>>()
     var resultSearch = MutableLiveData<SearchCity>()
     var state = MutableLiveData<ProgressState>(ProgressState.Success)
 
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            getAllItems()
+        }
+    }
+
+
+
+    fun getAllItems() {
+        val result = saveCityListUseCase.executeRoom().allNotes
+        allItemsCity.postValue(result)
+    }
 
     fun getCityList(city: String){
         viewModelScope.launch(Dispatchers.IO) {
@@ -33,7 +46,7 @@ class SearchViewModel @Inject constructor(
                 resultSearch.postValue(result)
                 state.postValue(ProgressState.Success)
             } catch (t: Throwable){
-                Log.e("Test", "${t.message}: $t")
+                Log.e("TestSearch", "SearchViewModel: ${t.message}: $t")
                 state.postValue(ProgressState.Error)
             }
 
