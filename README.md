@@ -4,7 +4,7 @@ Here you can just watch the weather forecast, nothing special
 <img src="https://i.imgur.com/6czdT2V.png">
 
 # TechStack
-* Clean architecture, MVVM
+* MVVM
 * Kotlin coroutines
 * Retrofit
 * Room
